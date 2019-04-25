@@ -31,10 +31,11 @@ def can_recieve_discount(user, course_key_string):
     # Always disable discounts until we are ready to enable this feature
     if not DISCOUNT_APPLICABILITY_FLAG.is_enabled():
         return False
-    
+
     # TODO: Add additional conditions to return False here
 
     return True
+
 
 def discount_percentage():
     """

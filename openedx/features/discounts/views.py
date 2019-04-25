@@ -16,7 +16,8 @@ from openedx.core.lib.api.view_utils import DeveloperErrorViewMixin
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from django.utils.decorators import method_decorator
+from openedx.core.djangoapps.cors_csrf.decorators import ensure_csrf_cookie_cross_domain
 
 
 class CourseUserDiscount(DeveloperErrorViewMixin, APIView):
@@ -32,13 +33,16 @@ class CourseUserDiscount(DeveloperErrorViewMixin, APIView):
     **Response Values**
 
         Body consists of the following fields:
+            discount_applicable: 
+                whether the user can recieve a discount for this course
+            jwt:
+                the jwt with user information and discount information
 
 
     **Parameters:**
 
-        username:
-            The username of the specified user for whom the discount data
-            is being accessed.
+        course_key_string:
+            The course key for the which the discount should be applied
 
     **Returns**
 
@@ -52,14 +56,16 @@ class CourseUserDiscount(DeveloperErrorViewMixin, APIView):
         Example response:
         {
             "discount_applicable": false,
-            "discount_percent": 0
+            "jwt": xxxxxxxx.xxxxxxxx.xxxxxxx
         }
     """
     authentication_classes = (JwtAuthentication, OAuth2AuthenticationAllowInactiveUser,
                               SessionAuthenticationAllowInactiveUser,)
     permission_classes = ApiKeyHeaderPermissionIsAuthenticated,
 
-
+    # Since the course about page on the marketing site uses this API to auto-enroll users,
+    # we need to support cross-domain CSRF.
+    @method_decorator(ensure_csrf_cookie_cross_domain)
     def get(self, request, course_key_string=None):
         """
         Return the discount percent, if the user has appropriate permissions.
@@ -67,4 +73,6 @@ class CourseUserDiscount(DeveloperErrorViewMixin, APIView):
         discount_applicable = can_recieve_discount(user=request.user, course_key_string=course_key_string)
         discount_percent = discount_percentage()
         payload = {'discount_applicable': discount_applicable, 'discount_percent': discount_percent}
-        return Response(create_jwt_for_user(request.user, additional_claims=payload))
+        return Response({
+            'discount_applicable': discount_applicable,
+            'jwt': create_jwt_for_user(request.user, additional_claims=payload)})

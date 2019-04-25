@@ -5,7 +5,8 @@ from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase
 from student.tests.factories import UserFactory
 from xmodule.modulestore.tests.factories import CourseFactory
 
-from .applicability import can_recieve_discount
+from ..applicability import can_recieve_discount
+
 
 class TestApplicability(ModuleStoreTestCase):
     """
