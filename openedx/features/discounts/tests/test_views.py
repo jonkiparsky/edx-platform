@@ -32,5 +32,6 @@ class TestCourseUserDiscount(ModuleStoreTestCase):
         self.assertEqual(response.status_code, 200)
 
         expected_payload = {'discount_applicable': False, 'discount_percent': 15}
-        response_payload = jwt.decode(response.data, verify=False)
+        self.assertEqual(expected_payload['discount_applicable'], response.data['discount_applicable'])
+        response_payload = jwt.decode(response.data['jwt'], verify=False)
         self.assertTrue(all(item in response_payload.items() for item in expected_payload.items()))
