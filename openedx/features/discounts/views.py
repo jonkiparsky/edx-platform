@@ -38,7 +38,6 @@ class CourseUserDiscount(DeveloperErrorViewMixin, APIView):
             jwt:
                 the jwt with user information and discount information
 
-
     **Parameters:**
 
         course_key_string:
