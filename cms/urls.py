@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib.admin import autodiscover as django_autodiscover
+from django.views.generic.base import RedirectView
 from django.utils.translation import ugettext_lazy as _
 from rest_framework_swagger.views import get_swagger_view
 
@@ -12,6 +13,7 @@ import openedx.core.djangoapps.debug.views
 import openedx.core.djangoapps.lang_pref.views
 from openedx.core.djangoapps.password_policy import compliance as password_policy_compliance
 from openedx.core.djangoapps.password_policy.forms import PasswordPolicyAwareAdminAuthForm
+from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 
 from ratelimitbackend import admin
 
@@ -187,6 +189,12 @@ if settings.FEATURES.get('ENABLE_CONTENT_LIBRARIES'):
         url(r'^library/{}/team/$'.format(LIBRARY_KEY_PATTERN),
             contentstore.views.manage_library_users, name='manage_library_users'),
     ]
+
+ # Favicon
+favicon_path = configuration_helpers.get_value('favicon_path', settings.FAVICON_PATH)  # pylint: disable=invalid-name
+urlpatterns += [
+    url(r'^favicon\.ico$', RedirectView.as_view(url=settings.STATIC_URL + favicon_path, permanent=True)),
+]
 
 if settings.FEATURES.get('ENABLE_EXPORT_GIT'):
     urlpatterns += [
