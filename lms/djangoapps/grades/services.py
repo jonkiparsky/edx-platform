@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 import pytz
 from six import text_type
 
-from lms.djangoapps.courseware.courses import get_course
+from courseware.courses import get_course
 from lms.djangoapps.grades.course_data import CourseData
 from lms.djangoapps.grades.subsection_grade import CreateSubsectionGrade
 from lms.djangoapps.utils import _get_key
