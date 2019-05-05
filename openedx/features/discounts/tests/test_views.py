@@ -29,9 +29,9 @@ class TestCourseUserDiscount(ModuleStoreTestCase):
         fake_request = self.request_factory.get('')
         fake_request.user = self.user
         response = CourseUserDiscount.as_view()(fake_request)
-        self.assertEqual(response.status_code, 200)
+        assert response.status_code == 200
 
         expected_payload = {'discount_applicable': False, 'discount_percent': 15}
-        self.assertEqual(expected_payload['discount_applicable'], response.data['discount_applicable'])
+        assert expected_payload['discount_applicable'] == response.data['discount_applicable']
         response_payload = jwt.decode(response.data['jwt'], verify=False)
-        self.assertTrue(all(item in response_payload.items() for item in expected_payload.items()))
+        assert all(item in response_payload.items() for item in expected_payload.items())
