@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 import jwt
 
+from django.test.client import Client
+
 from xmodule.modulestore.tests.factories import CourseFactory
 from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase
 from student.tests.factories import UserFactory
@@ -20,15 +22,15 @@ class TestCourseUserDiscount(ModuleStoreTestCase):
         super(TestCourseUserDiscount, self).setUp()
         self.user = UserFactory.create()
         self.course = CourseFactory.create(run='test', display_name='test')
-        self.request_factory = APIRequestFactory()
+        self.client = Client()
+        self.client.login(username=self.user.username, password='test')
 
     def test_course_user_discount(self):
         """
         Test that the api returns a jwt with the discount information
         """
-        fake_request = self.request_factory.get('')
-        fake_request.user = self.user
-        response = CourseUserDiscount.as_view()(fake_request)
+        import pdb; pdb.set_trace()
+        response = self.client.get(reverse('course_user_discount', args=[self.course.id.course]))
         assert response.status_code == 200
 
         expected_payload = {'discount_applicable': False, 'discount_percent': 15}

@@ -65,7 +65,7 @@ class CourseUserDiscount(DeveloperErrorViewMixin, APIView):
     # Since the course about page on the marketing site uses this API to auto-enroll users,
     # we need to support cross-domain CSRF.
     @method_decorator(ensure_csrf_cookie_cross_domain)
-    def get(self, request, course_key_string=None):
+    def get(self, request, course_key_string):
         """
         Return the discount percent, if the user has appropriate permissions.
         """

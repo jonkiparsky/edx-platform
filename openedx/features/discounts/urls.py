@@ -7,5 +7,5 @@ from django.conf.urls import include, url
 from .views import CourseUserDiscount
 
 urlpatterns = [
-    url(r'^course/{}'.format(settings.COURSE_KEY_PATTERN), CourseUserDiscount.as_view(), name="course_user_discount"),
+    url(r'^course/{}'.format(settings.COURSE_KEY_PATTERN), CourseUserDiscount.as_view(), name='course_user_discount'),
 ]
