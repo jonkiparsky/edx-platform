@@ -43,6 +43,7 @@ pipeline {
         XDIST_CONTAINER_SECURITY_GROUP = credentials('XDIST_CONTAINER_SECURITY_GROUP')
         XDIST_CONTAINER_TASK_NAME = "jenkins-worker-task"
         XDIST_GIT_BRANCH = xdist_git_branch()
+        DISABLE_COURSEENROLLMENT_HISTORY = 1
     }
     stages {
         stage('Mark build as pending on Github') {
