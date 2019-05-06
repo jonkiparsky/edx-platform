@@ -33,7 +33,7 @@ class CourseUserDiscount(DeveloperErrorViewMixin, APIView):
     **Response Values**
 
         Body consists of the following fields:
-            discount_applicable: 
+            discount_applicable:
                 whether the user can recieve a discount for this course
             jwt:
                 the jwt with user information and discount information
